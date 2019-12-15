@@ -1,0 +1,12 @@
+version: "2.3"
+services:
+  chessboard: 
+    image: PiR43/chessboard
+    build: .
+    restart: always
+    ports:
+      - "2323:2323"
+    volumes:
+      - ./board.py:/board.py
+      - ./lichess.token:/lichess.token
+    command: python -u /board.py
