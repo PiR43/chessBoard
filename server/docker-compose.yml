@@ -1,7 +1,7 @@
 version: "2.3"
 services:
   chessboard: 
-    image: PiR43/chessboard
+    image: pir43/chessboard
     build: .
     restart: always
     ports:
