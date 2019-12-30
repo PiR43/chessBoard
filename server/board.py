@@ -3,6 +3,7 @@ import threading
 import socket
 import sys
 import chess
+from time import time
 
 global client
 global gameId
@@ -10,6 +11,7 @@ global move
 move = None
 endGame = False
 color= ""
+lastPing = time()
 
 print("begin")
 
@@ -99,6 +101,7 @@ s.bind(('', 2323))
 s.listen(1)
 while 1:
     conn, addr = s.accept()
+    lastPing = time()
 
 
 
@@ -108,11 +111,16 @@ while 1:
     lastClientMove = None
     while 1:
         try:
+          if time() - lastPing > 31:
+              break
           data = conn.recv(1024).decode("utf-8")
           if data: 
               print("["+data+"]")
               lastClientMoves = data
-              if "newGame" in data:
+              if "ping" in data:
+                  conn.send("pong".encode())
+                  lastPing = time()
+              elif "newGame" in data:
                   if "white" in data:
                     client.challenges.create("Peit_Frere_Poulpe",False,color="white")
                   else:
