@@ -115,7 +115,7 @@ def flipFen(string):
     res = ""
     for c in reversed(string):
       res = res + c
-    return reversed(res)
+    return res
   else:
     return string
 
@@ -183,6 +183,8 @@ isCheck = False
 isDrawMate = False
 ourColor = ""
 computerColor = ""
+lastPing = time()
+
 while True:
   caseToDisplay = None
   if newMove:
@@ -283,7 +285,9 @@ while True:
           bipError()
           
       
-
+  if time() - lastPing > 10:
+    s.send("ping")
+    lastPing = time()
   r = s.read()
   if r is not None and "reboot" in r.decode("utf-8"):
     reset()
@@ -291,6 +295,8 @@ while True:
     break
   if r:
     print(r.decode("utf-8"))
+    if "pong" in r.decode("utf-8"):
+	continue
     if "end game" in r.decode("utf-8"):
       if "check" in r.decode("utf-8"):
 	isCheck = True
