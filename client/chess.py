@@ -190,8 +190,6 @@ while True:
   elif moveToSend:
     caseToDisplay = moveToSend[0:2].upper()
   nbLoop = nbLoop + 1
-  #if nbLoop > 10:
-    #break
   touch = None
   for row in "12345678op":
     for col in "ABCDEFGH":
@@ -307,6 +305,8 @@ while True:
       color = computerColor
       if newMove == lastSendMove.lower():
 	  newMove = ""
+      else:
+        bip()
     else:
       color = ourColor
     validMoves = flip(r.decode("utf-8").split("|")[1]).split()
