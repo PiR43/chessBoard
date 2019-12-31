@@ -12,6 +12,7 @@ move = None
 endGame = False
 color= ""
 lastPing = time()
+initialFen = ""
 
 print("begin")
 
@@ -23,7 +24,10 @@ client = berserk.Client(session)
 
 def addLegalMoves(moves):
     global color
-    board = chess.Board()
+    if "/" in initialFen:
+      board = chess.Board(initialFen)
+    else:
+      board = chess.Board()
     for move in moves.split():
         board.push(chess.Move.from_uci(move))
     res = ""
@@ -40,6 +44,7 @@ class Game(threading.Thread):
         def __init__(self, client, game_id, **kwargs):
                 global move
                 global color
+                global initialFen
                 super().__init__(**kwargs)
                 self.game_id = game_id
                 self.client = client
@@ -48,6 +53,7 @@ class Game(threading.Thread):
                 print('init')
                 print(self.current_state)
                 move = self.current_state["state"]["moves"]
+                initialFen = self.current_state["initialFen"]
                 try:
                     if self.current_state["white"]["id"] == "pirboard":
                         color = "white"
