@@ -1,0 +1,29 @@
+# This file is executed on every boot (including wake-boot from deepsleep)
+import esp
+esp.osdebug(None)
+
+import network                                                                                                                                        
+sta_if = network.WLAN(network.STA_IF); sta_if.active(True) 
+
+for w in sta_if.scan():
+  if "wifi1" in w[0]:
+    sta_if.connect("wifi1","pass1")
+    break
+  if "wifi2" in w[0]:
+    sta_if.connect("wifi2","pass2")
+    break
+
+
+
+import webrepl
+webrepl.start()
+
+
+import sys
+import gc
+from sys import modules
+def reload(mod):
+  mod_name = mod.__name__
+  del sys.modules[mod_name]
+  gc.collect()
+  return __import__(mod_name)

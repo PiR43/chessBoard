@@ -109,8 +109,6 @@ def mario():
         time.sleep(0.150)
 
 
-mario()
-
 def bip():
   pwmSound.freq(440)
   pwmSound.duty(512)
@@ -128,3 +126,4 @@ def bipError():
   pwmSound.duty(0)
   
   
+pwmSound.duty(0)
