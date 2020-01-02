@@ -187,7 +187,8 @@ while not goWebRepl:
 	      if "check" in r.decode("utf-8"):
 		isCheck = True
 	      isDrawMate = True
-	      continue
+	      if "|" not in r.decode("utf-8"):
+		continue # continue only if end game on a separtae line (with slow network it could arrive in same time than last move)
 	    ourColor = r.decode("utf-8").split("|")[3]
 	    computerColor = "black" if ourColor == "white" else "white"
 	    newMove = flip(r.decode("utf-8").split("|")[0])
