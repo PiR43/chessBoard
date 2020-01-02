@@ -8,6 +8,7 @@ from time import time
 global client
 global gameId
 global move
+gameId = None
 move = None
 endGame = False
 color= ""
@@ -91,6 +92,7 @@ class IncomingEvents(threading.Thread):
         super().__init__(**kwargs)
     def run(self):
         global gameId
+        gameId = None
         for event in client.bots.stream_incoming_events():
             print(event)
             if  event['type'] == 'gameStart':
@@ -142,7 +144,7 @@ while 1:
           pass
         except:
           print("Unexpected error:", sys.exc_info())
-        if move != lastSendMove:
+        if move != lastSendMove and gameId:
             conn.send((addLegalMoves(move)).encode())
             print((addLegalMoves(move)).encode())
             lastSendMove = move
@@ -152,6 +154,7 @@ while 1:
                 pass
             veryLastMoves = event["state"]["moves"]
             if lastClientMoves.lower() != veryLastMoves[-1]:
+                move = veryLastMoves
                 conn.send((addLegalMoves(veryLastMoves.lower())).encode())
             conn.send("end game".encode())
             endGame = False
